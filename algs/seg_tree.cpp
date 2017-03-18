@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 const int N = 1e6 + 5;
 
 int t[N<<1];
@@ -21,21 +18,3 @@ int query(int l, int r, int n) { // [l, r)
     }
     return resp;
 }
-
-int main() {
-    int n;
-    scanf("%d", &n);
-    for(int i=0; i<n;i++) {
-        scanf("%d", t+n+i);
-    }
-    build(n);
-    int q;
-    scanf("%d", &q);
-    for (int i=0;i<q;i++) {
-        int l, r;
-        scanf("%d %d", &l, &r);
-        printf("%d\n", query(l, r+1, n));
-    }
-    return 0;
-}
-
