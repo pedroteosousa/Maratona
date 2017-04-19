@@ -15,8 +15,8 @@ struct Edge {
 vector<Edge> g[N];
 
 void addEdge(int s, int t, int cap){
-    Edge a = {t, (int)g[t].size(), 0, cap};
-    Edge b = {s, (int)g[s].size(), 0, cap};
+    Edge a = {t, 0, 0, cap};
+    Edge b = {s, (int)g[s].size(), 0, 0};
     g[s].push_back(a);
     g[t].push_back(b);
 }
@@ -86,24 +86,24 @@ int main() {
         se[s[3]+s[4]+s[5]].push_back(i);
     }
     for(int i=0;i<m;i++) {
-        addEdge(n+m+1, i+n, 1);
+        addEdge(i+n, n+m+1, 1);
         string s;
         cin >> s;
         as[i+n] = s;
         for(int j=0;j<se[s[0]+s[1]+s[2]].size();j++) {
-            addEdge(i+n, se[s[0]+s[1]+s[2]][j], 1);
+            addEdge(se[s[0]+s[1]+s[2]][j], i+n, 1);
         }
         for(int j=0;j<fi[s[3]+s[4]+s[5]].size();j++) {
-            addEdge(i+n, fi[s[3]+s[4]+s[5]][j], 1);
+            addEdge(fi[s[3]+s[4]+s[5]][j], i+n, 1);
         }
     }
     int nk = maxFlow(n+m, n+m+1);
     printf("%d\n", nk);
-    for(int i=0;i<m;i++) {
+    for(int i=-n;i<0;i++) {
         for(int j=0;j<g[i+n].size(); j++) {
-            if (g[i+n][j].f && g[i+n][j].to != m+n+1) {
-                printf("TA %s %s\n", as[i+n].c_str(), as[g[i+n][j].to].c_str());
-                break;
+            if (g[i+n][j].f) {
+                if (as[i+n][0]+as[i+n][1]+as[i+n][2]==as[g[i+n][j].to][3]+as[g[i+n][j].to][4]+as[g[i+n][j].to][5]) printf("AT %s %s\n", as[i+n].c_str(), as[g[i+n][j].to].c_str());
+                if (as[i+n][3]+as[i+n][4]+as[i+n][5]==as[g[i+n][j].to][0]+as[g[i+n][j].to][1]+as[g[i+n][j].to][2]) printf("TA %s %s\n",  as[g[i+n][j].to].c_str(), as[i+n].c_str());
             }
         }
     }
