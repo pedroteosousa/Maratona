@@ -7,8 +7,33 @@ const int inf = 1791791791;
 
 #define pb push_back
 
-pair<pair<int, int>, int> v[N], mx[N];
-int lis[N], p[N];
+struct person {
+	int s, b;
+	int index;
+	person(int _s, int _b, int i) {
+		s = _s;
+		b = _b;
+		index = i;
+	}
+};
+
+bool cmp(const person &a, const person &b) {
+	if (a.s < b.s) return true;
+	else if (a.s == b.s) {
+		if (a.b < b.b) return true;
+		else if (a.b == b.b) return a.index < b.index;
+		else return false;
+	}
+	else return false;
+}
+
+bool cmp2(const person &a, const person &b) {
+	if (a.s < b.s && a.b < b.b) return true;
+	else return false;
+}
+
+vector<struct person> v;
+struct person mx[N];
 
 int main() {
 	int n;
@@ -16,37 +41,12 @@ int main() {
 	for (int i=0;i<n;i++) {
 		int a, b;
 		scanf("%d %d", &a, &b);
-		v[i] = {{a, b}, i};
-		lis[i] = 1;
-		mx[i+1] = {{inf, inf}, inf};
+		v.pb(person(a, b, i));
 	}
-	sort(v, v+n);
-	mx[0] = {{0, 0}, -1};
+	sort(v.begin(), v.end(), cmp);
 	for (int i=0;i<n;i++) {
-		int j = lower_bound(mx+1, mx+n+1, v[i]) - mx - 1;
-		//printf("j = %d -> %d %d %d\n", j, mx[j].first.first, mx[j].first.second, mx[j].second);
-		if (mx[j].first.first < v[i].first.first && mx[j].first.second < v[i].first.second) {
-			lis[i] = max(lis[i], j+1);
-			p[v[i].second] = mx[j].second;
-			mx[j+1] = min(mx[j+1], v[i]);
-			//printf("j = %d i = %d p = %d\n", j, i, p[i]);
-		}
+		
 	}
-	int mxx = 0;
-	int id = inf;
-	for (int i=0;i<n;i++) {
-		if (mxx < lis[i]) {
-			mxx = lis[i];
-			id = v[i].second;
-			//printf("%d\n", i);
-		}
-	}
-	printf("%d\n", mxx);
-	while(id != -1) {
-		printf("%d ", id+1);
-		id = p[id];
-	}
-	printf("\n");
-    return 0;
+	return 0;
 }
 
