@@ -6,32 +6,31 @@ using namespace std;
 #define pb push_back
 #define mp make_pair
 
-const int N = 5e6 + 5;
+const int N = 200;
 const int inf = 1791791791;
 const int mod = 1e9+7;
+
+int c[N][N];
 
 int main() {
 	int n;
 	scanf("%d", &n);
-	vector<int> a, b;
-	for (int i=0;i<=n;i++) {
-		if (i%2 == 0) a.push_back(1);
-		else a.push_back(0);
-
-		if (i == n) break;
-
-		if (i%2 == 0) b.push_back(1);
-		else b.push_back(-1);
+    c[0][0] = c[1][1] = 1;
+	c[1][0] = 0;
+	for (int i=2;i<=n;i++) {
+		for (int j=0;j<=i;j++) {
+			if (j != 0) c[i][j] += c[i-1][j-1];
+			c[i][j] += c[i-2][j];
+			c[i][j] %= 2;
+		}
 	}
-	printf("%d\n", n);
-	for (int i=0;i<=n;i++) {
-		printf("%d ", a[n-i]);
+	for (int i=n;i>=n-1;i--) {
+		printf("%d\n", i);
+		for (int j=0;j<=i;j++) {
+			printf("%d ", c[i][j]);
+		}
+		printf("\n");
 	}
-	printf("\n%d\n", n-1);
-	for (int i=0;i<=n-1;i++) {
-		printf("%d ", b[n-1-i]);
-	}
-	printf("\n");
-    return 0;
+	return 0;
 }
 
