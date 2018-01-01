@@ -9,29 +9,26 @@ vector<int> conn[N];
 
 // time complexity: O(V+E)
 stack<int> ts;
-int tme = 1, ncomp = 1, lowlink[N], seen[N];
+int tme = 0, ncomp = 0, low[N], seen[N];
 int comp[N]; // nodes in the same scc have the same color
 int scc_dfs(int n) {
-	seen[n] = lowlink[n] = tme++;
+	seen[n] = low[n] = ++tme;
 	ts.push(n);
 	for (auto a : conn[n]) {
 		if (seen[a] == 0)
-			lowlink[n] = min(lowlink[n], scc_dfs(a));
-		else
-			lowlink[n] = min(lowlink[n], seen[a]);
+			scc_dfs(a);
+		low[n] = min(low[n], low[a]);
 	}
-	if (lowlink[n] == seen[n]) {
+	if (low[n] == seen[n]) {
 		int node;
 		do {
-			node = ts.top();
+			node = ts.top(); ts.pop();
 			comp[node] = ncomp;
-			ts.pop();
+			low[node] = inf;
 		} while (n != node && ts.size());
 		ncomp++;
 	}
-	int mn = lowlink[n];
-	lowlink[n] = inf;
-	return mn;
+	return low[n];
 }
 
 int cost[N];
