@@ -8,9 +8,8 @@ vector<int> conn[N];
 
 // time complexity: O(V+E)
 stack<int> ts;
-int tme = 1, cur = 1;
-int lowlink[N], seen[N];
-int color[N]; // nodes in the same scc have the same color
+int tme = 1, ncomp = 1, lowlink[N], seen[N];
+int comp[N]; // nodes in the same scc have the same color
 int scc_dfs(int n) {
 	seen[n] = lowlink[n] = tme++;
 	ts.push(n);
@@ -18,16 +17,16 @@ int scc_dfs(int n) {
 		if (seen[a] == 0)
 			lowlink[n] = min(lowlink[n], scc_dfs(a));
 		else
-			lowlink[n] = min(lowlink[n], lowlink[a]);
+			lowlink[n] = min(lowlink[n], seen[a]);
 	}
-	if (color[n] == 0) {
+	if (lowlink[n] == seen[n]) {
 		int node;
 		do {
 			node = ts.top();
-			color[node] = cur;
+			comp[node] = ncomp;
 			ts.pop();
-		} while (lowlink[node] != seen[node]);
-		cur++;
+		} while (n != node && ts.size());
+		ncomp++;
 	}
 	int mn = lowlink[n];
 	lowlink[n] = inf;
@@ -50,11 +49,11 @@ int main() {
 	int count = 0;
 	for (int i=0;i<n;i++)
 		for (auto a : conn[i])
-			if (color[a] != color[i]) {
-				not_leaf[color[i]] = 1;
+			if (comp[a] != comp[i]) {
+				not_leaf[comp[i]] = 1;
 				break;
 			}
-	for (int i=1;i<cur;i++)
+	for (int i=1;i<ncomp;i++)
 		if (not_leaf[i] == 0) count++;
 	if (count > 1) {
 		printf("0\n");
@@ -62,11 +61,11 @@ int main() {
 	}
    	count = 0; 
 	for (int i=0;i<n;i++)
-		if (not_leaf[color[i]] == 0)
+		if (not_leaf[comp[i]] == 0)
 			count++;
 	printf("%d\n", count);
 	for (int i=0;i<n;i++)
-		if (not_leaf[color[i]] == 0) printf("%d ", i+1);
+		if (not_leaf[comp[i]] == 0) printf("%d ", i+1);
 	printf("\n");
 	return 0;
 }
