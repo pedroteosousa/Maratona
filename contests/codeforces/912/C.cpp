@@ -72,9 +72,11 @@ int main() {
 					regen0[info[1]-1] = info[0];
 				}
 			} else {
-				all.push_back(mp(regen0[info[1]-1], 0));
-				all.push_back(mp(info[0]-1, 1));
-				regen0[info[1]-1] = -1;
+				if (regen0[info[1]-1] != -1) {
+					all.push_back(mp(regen0[info[1]-1], 0));
+					all.push_back(mp(info[0]-1, 1));
+					regen0[info[1]-1] = -1;
+				}
 			}
 		}
 		if (dmg >= info[2] && en[info[1]-1][2] != 0) {
@@ -89,7 +91,7 @@ int main() {
 				gg[info[1]-1] = (int)all.size() - 1;
 			}
 		} else if (dmg < info[2] && en[info[1]-1][2] != 0) {
-			if (gg[info[1]-1] != 0) {
+			if (out[info[1]-1] >= info[0]) {
 				all[gg[info[1]-1]].first = info[0]-1;
 				out[info[1]-1] = -1;
 				gg[info[1]-1] = 0;
