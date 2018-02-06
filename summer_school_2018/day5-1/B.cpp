@@ -12,8 +12,8 @@ const int mod = 1e9+7;
 
 int z[N];
 
-void zf(const char *s) {
-	int n = strlen(s);
+void zf(vector<int> s) {
+	int n = s.size();
 	int l, r;
 	l = r = 0;
 	for (int i=0;i<n;i++) {
@@ -36,42 +36,20 @@ void zf(const char *s) {
 	}
 }
 
-char s[N];
-int p[N], pa[N], w[N];
-
-int find(int x) {
-	return (pa[x] == x) ? x : pa[x] = find(pa[x]);
-}
-
-void join(int a, int b) {
-	if ((a = find(a)) == (b = find(b))) return;
-	if (w[a] < w[b]) swap(a, b);
-	pa[b] = a;
-	w[a] += w[b];
-}
-
+vector<int> s;
+int p[N];
 int main() {
 	int n; scanf("%d", &n);
-	memset(s, 0, sizeof s);
+	int h = 1;
 	for (int i=0;i<n;i++) {
-		w[pa[i] = i] = 1;
 		scanf("%d", &p[i]);
-	}
-	for (int i=n-1;i>=0;i--) {
-		int k = p[i]-1;
-		while (k >= 0) {
-			join(i--, k--);
+		if (p[i] != 0) {
+			s.pb(s[p[i]-1]);
+		} else {
+			s.pb(h);
+			h++;
 		}
-		if (p[i]-1 >= 0) i++;
 	}
-	char mander = 'a';
-	for (int i=0;i<n;i++) {
-		if (find(i) == i) s[i] = mander++;
-	}
-	for (int i=0;i<n;i++) {
-		s[i] = s[find(i)];
-	}
-	//printf("s = %s\n", s);
 	zf(s);
 	for (int i=0;i<n;i++) {
 		printf("%d ", z[i]);
