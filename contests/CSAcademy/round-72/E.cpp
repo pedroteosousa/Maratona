@@ -35,15 +35,14 @@ int main() {
 			else if (r >= l1 && l <= r1) {
 				int lm = min(l, l1);
 				int rm = max(r, r1);
-				set<pair<int, int> >::iterator it;
-				it = b.upper_bound(mp(rm+1, 0));
-				if (it != b.end()) {
+				pair<int, int> p1 = *b.rbegin();
+				pair<int, int> p2 = *e.begin();
+				if (p1.first > rm || p2.first < lm) {
 					printf("2\n");
+				} else if ((p1.first > r && p2.first < l1) || (p1.first > r1 && p2.first < l)) {
+					printf("3\n");
 				} else {
-					it = e.lower_bound(mp(lm-1, inf));
-					if (it != e.begin()) {
-						printf("2\n");
-					} else printf("-1\n");
+					printf("-1\n");
 				}
 			} else {
 				printf("1\n");
