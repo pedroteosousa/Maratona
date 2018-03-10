@@ -12,6 +12,7 @@ const ll inf = 1791791791;
 const ll mod = 1e9+7;
 
 int ho[N], ind[N], outd[N];
+int outd2[N];
 
 vector<int> conn[N];
 
@@ -62,26 +63,20 @@ int main() {
 		col(ho[c1-1], ho[c2-1], h, c1-1, c2-1);
 	}
 	for (int i=0;i<n;i++) {
-		if (!seen[i]) scc_dfs(i);
+		if (!seen[i])
+			scc_dfs(i);
 		comps[comp[i]].pb(i);
 	}
 	int mn = n+1, id = 0;
-	for (auto a : comps) {
-		int found = 0;
-		for (auto b : a.second) {
-			if (outd[b] == 0) {
-				found = 1;
-				break;
-			} else if (ind[b] == 0) {
-				found = 2;
-				break;
-			}
+	for (int i=0;i<n;i++) {
+		for (auto a : conn[i]) {
+			if (comp[i] != comp[a]) outd2[comp[i]]++;
 		}
-		if (found != 2) {
-			if (mn > a.second.size()) {
-				mn = a.second.size();
-				id = a.first;
-			}
+	}
+	for (auto a : comps) {
+		if (mn > a.second.size() && outd2[a.first] == 0) {
+			mn = a.second.size();
+			id = a.first;
 		}
 	}
 	printf("%d\n", mn);
