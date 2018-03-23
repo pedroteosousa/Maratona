@@ -61,6 +61,10 @@ int main () {
 		//printf("%d ", z[i]);
 		while (true) {
 			set<int>::iterator it = asdf.upper_bound(z[i]);
+			if (z[i] == m && m < k && i-m-1+z[i] >= k && n-(i-m-1+m)+1 > k) {
+				printf("Yes\n%d %d\n", 1, n-(i-m-1+m)+1);
+				return 0;
+			}
 			if (it != asdf.begin()) {
 				it--;
 				int g = *it;
@@ -77,6 +81,10 @@ int main () {
 	Z(t + string("$") + s);
 	for (int i=m+1;i<=n+m;i++) {
 		while (true) {
+			if (z[i] == m && m < k && i-m-1+2*k <= n) {
+				printf("Yes\n%d %d\n", i-m, i-m+k);
+				return 0;
+			}
 			set<int>::iterator it = asdf2.upper_bound(z[i]);
 			if (it != asdf2.begin()) {
 				it--;
@@ -88,7 +96,7 @@ int main () {
 						int y = val[m-g] + i-m+g-k;
 						//printf("y = %d %d %d\n", y, val[m-g], i-m+g-k);
 						if (y <= n && i-m+g < n-val[m-g]+1) {
-							//printf("Yes\n%d %d\n", i-m+g-k, n-val[m-g]+1);
+							printf("Yes\n%d %d\n", i-m+g-k, n-val[m-g]+1);
 							return 0;
 						}
 					}
