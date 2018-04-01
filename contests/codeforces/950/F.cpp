@@ -63,19 +63,21 @@ int main() {
 				}
 			}
 			update(i, -get(i), N);
-			int j = n-i+1;	
-			if (get(j) >= tot) {
-				update(j-1, get(j)-tot, N);
-			} else {
-				int miss = tot - get(j);
-				while (miss != 0) {
-					int have = get(l2);
-					update(l2, -min(have, miss), N);
-					miss -= min(have, miss);
-					l2--;
+			if (n % 2 != 1 || i != (n+1)/2) {
+				int j = n-i+1;	
+				if (get(j) >= tot) {
+					update(j-1, get(j)-tot, N);
+				} else {
+					int miss = tot - get(j);
+					while (miss != 0) {
+						int have = get(l2);
+						update(l2, -min(have, miss), N);
+						miss -= min(have, miss);
+						l2--;
+					}
 				}
+				update(j, -get(j), N);
 			}
-			update(j, -get(j), N);
 			resp++;
 		
 			//for (int y=1;y<=n;y++) printf("%d ", get(y));
