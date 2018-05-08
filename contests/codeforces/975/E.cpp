@@ -47,39 +47,26 @@ double a[N];
 
 int main() {
 	int n, q; scanf("%d %d", &n, &q);
+	point bar(0,0);
 	for (int i=0;i<n;i++) {
 		scanf("%lf %lf", &h[i].x, &h[i].y);
+		bar = bar + h[i];
 	}
+	bar = bar / (double)n;
 	double area = 0;
 	for (int i=1;i<=n;i++) {
 		area -= h[i%n]^h[i-1];
 	} area /= 2.0;
 	for (int i=0;i<n;i++) {
-		double temp = 0;
-		int j = i+1;
-		for (;;j++) {
-			temp -= (h[j%n]-h[i])^(h[(j-1)%n]-h[i]);
-			if (temp > area) break;
-		}
-		int o = (j-1)%n; j %= n;
-		double l = 0.0, r = 1.0;
-		for (int k=0;k<60;k++) {
-			double m = (l+r)/2.0;
-			double at = (h[i]-h[j]) ^ ((h[o]-h[j])*m);	
-			if (temp/2.0 - at/2.0 > area/2.0) l = m;
-			else r = m;
-		}
 		point down(0, -1);
-		point dir = (h[j]-h[o])*l + (h[o]-h[i]);
-		debug("dir = (%lf, %lf)\n", dir.x, dir.y);
+		point dir = (bar - h[i]);
 		a[i] = acos((down*dir)/dir.len());
 		if (dir.x < 0) a[i] *= -1.0;
-		debug("ang = %lf\n", a[i]*180.0 / PI);
+		printf("a[i] = %lf\n", a[i] * 180.0 / PI);
 	}
-
-	double ang = 0;
-	point fst = h[0];
+	int top = -1;
 	int pins[2] = {0, 1};
+	point cbar = bar;
 	while (q--) {
 		int tp, f; scanf("%d %d", &tp, &f); f--;
 		if (tp == 1) {
@@ -92,15 +79,23 @@ int main() {
 			}
 			k = pins[1];
 			pins[0] = t;
-			point g = (h[k]-h[0]).rotate(ang) + fst;
-			debug(" g = %.10lf %.10lf\n", g.x, g.y);
-			ang = a[k];
-			debug("ang = %lf, k = %d\n", ang, k);
-			fst = (h[0]-h[k]).rotate(-ang) + g;
-			debug("%lf %lf\n", fst.x, fst.y);
+			
+			point g;
+			if (top == -1) {
+				g = h[k];
+			} else {
+				g = (h[k]-bar).rotate(-a[top]) + cbar;
+			}
+			cbar = point(0, -1) * (bar - h[k]).len() + g;
+			printf("cbar = (%lf %lf)\n", cbar.x, cbar.y);
+			top = k;
 		} else {
 			point g;
-			g = (h[f]-h[0]).rotate(-ang) + fst;
+			if (top == -1) {
+				g = h[f];
+			} else {
+				g = (h[f]-bar).rotate(-a[top]) + cbar;
+			}
 			printf("%.10lf %.10lf\n", g.x, g.y);
 		}
 	}
