@@ -32,14 +32,16 @@ int main() {
 			if (l.size() != 0 && p == *l.rbegin()) {
 				l.erase(l.find(p));
 				for (auto a : m) {
-					l.insert(a);
+					r.insert(a);
 				}
+				m.clear();
 			}
 			else if (r.size() != 0 && p == *r.begin()) {
 				r.erase(r.find(p));
 				for (auto a : m) {
 					l.insert(a);
 				}
+				m.clear();
 			}
 			else if (m.find(p) != m.end()) {
 				resp *= 2ll;

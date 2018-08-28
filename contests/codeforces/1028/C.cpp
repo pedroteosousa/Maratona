@@ -43,20 +43,24 @@ int number(rect it) {
 
 int main() {
 	int n; scanf("%d", &n);
-	set<int> x, y;	
+	set<pair<int, int> > x, y;	
 	for (int i=0;i<n;i++) {
 		rect a;
 		scanf("%d %d %d %d", &a.x1, &a.y1, &a.x2, &a.y2);
-		x.insert(a.x1);
-		y.insert(a.y1);
+		x.insert(mp(a.x1, i));
+		y.insert(mp(a.y1, i));
 		v.pb(a);
 	}
-	int v1 = -1;
+	int v1 = -1, v2 = -1;
 	for (int i=0;i<n;i++) {
-		if (x.upper_bound(v[i].x2) == x.end() && y.upper_bound(v[i].y2) == y.end()) {
-
-		} else {
+		if (x.upper_bound(mp(v[i].x2, n)) != x.end()) {
 			v1 = i;
+			v2 = x.upper_bound(mp(v[i].x2, n))->second;
+			break;
+		}
+		if (y.upper_bound(mp(v[i].y2, n)) != y.end()) {
+			v1 = i;
+			v2 = y.upper_bound(mp(v[i].y2, n))->second;
 			break;
 		}
 	}
@@ -67,13 +71,13 @@ int main() {
 		if (i != v1) {
 			i1 = i1.get(v[i]);
 		}
+		if (i != v2) {
+			i2 = i2.get(v[i]);
+		}
 	}
 	if (i1.isOk() && number(i1) >= n-1) {
 		printf("%d %d\n", i1.x1, i1.y1);
 		return 0;
-	}
-	for (int i=0;i<n;i++) {
-		if (v[i].inter(i2)) i2 = i2.get(v[i]);
 	}
 	if (i2.isOk() && number(i2) >= n-1) {
 		printf("%d %d\n", i2.x1, i2.y1);
